@@ -36,23 +36,42 @@ class Parser(object):
         self.initialize_matrix(sent_len)
 
         # Starting the big looping
-        for i in xrange(sent_len):
+        for i in xrange(1, sent_len + 1):
             # For each word
-            word = sentence[i]
+            word = sentence[i - 1]
             non_terms_tup = rule_ind[tuple([word])]
 
             # Iterate over all the rules than can cause this
             for diff_rules in non_terms_tup:
                 temp_rule = self.rules_list[diff_rules[1]]
-                self.matrix[i][i + 1].append((diff_rules[0][0],
+                self.matrix[i - 1][i].append((diff_rules[0][0],
                                               temp_rule))
                 # Each cell contains a list of tuples
                 # The first element of the tuple is the non-terminal
                 # THe second is the rule object responsible for it
 
                 # Go up the column
-            for row_id in xrange(i, -1, -1):
-                
+            for row_id in xrange(i - 2, -1, -1):
+                # Looking at all possible conditions
+                for inter_id in xrange(i - 1, row_id, -1):
+                    left_tuple = self.matrix[row_id][inter_id]
+                    right_tuple = self.matrix[inter_id][i]
+                    for l_tuples in left_tuple:
+                        for r_tuples in right_tuple:
+                            left_elem = l_tuples[0]
+                            right_elem = r_tuples[0]
+                            poss_tuple = (left_elem, right_elem)
+                            if poss_tuple in rule_ind.keys():
+                                search_res = rule_ind[(left_elem, right_elem)]
+                                # Iterate over all the rules than can cause
+                                # this
+                                for diff_rules in search_res:
+                                    temp_rule = self.rules_list[diff_rules[1]]
+                                    self.matrix[row_id][i].append(
+                                        (diff_rules[0][0],
+                                         temp_rule))
+
+
 if __name__ == '__main__':
     parser = Parser()
     with open('./example.txt') as f:
