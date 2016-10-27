@@ -38,7 +38,7 @@ class Reader(object):
         self.non_terminal = []
         self.terminal = []
 
-    def read(self, filename='./small.grammar'):
+    def read(self, filename='./big.grammar'):
         with open(filename, 'rb') as f:
             lines = f.readlines()
             for line in lines:

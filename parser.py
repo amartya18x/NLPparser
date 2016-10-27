@@ -1,5 +1,6 @@
 from model import cyk_model
 from rule_reader import Reader
+import copy
 from utils import create_dict_rec, draw_graph, print_pretty
 
 
@@ -17,7 +18,7 @@ class Parser(object):
         self.terminal_ind, self.non_term_ind, self.rules = \
             model.get_dicts()
         self.rules_list = rules_list
-        
+
     def reset_values(self):
         self.matrix = []
 
@@ -64,13 +65,13 @@ class Parser(object):
                                 # Iterate over all the rules than can cause
                                 # this
                                 for diff_rules in search_res:
-                                    temp_rule = self.rules_list[diff_rules[1]]
+                                    temp_rule = copy.deepcopy(
+                                        self.rules_list[diff_rules[1]])
                                     self.matrix[row_id][i].append(
                                         (diff_rules[0][0],
                                          temp_rule))
                                     temp_rule.set_children(l_tuples[1],
                                                            r_tuples[1])
-
         return self.matrix
 if __name__ == '__main__':
     parser = Parser()
@@ -79,8 +80,11 @@ if __name__ == '__main__':
         for line in lines:
             parser.reset_values()
             parser.populate(line.split())
-            final_node = parser.matrix[0][-1][0][1]
-            src_graph = {'S': create_dict_rec(final_node)}
+            for trees in parser.matrix[0][-1]:
+                if trees[0] == 'S':
+                    print(" =========================== ")
+                    final_node = trees[1]
+                    src_graph = {'S': create_dict_rec(final_node)}
+                    print_pretty(src_graph)
+
             draw_graph(src_graph)
-            print_pretty(src_graph)
-            

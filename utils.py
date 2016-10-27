@@ -16,9 +16,12 @@ def create_dict_rec(root):
         temp = collections.OrderedDict()
         try:
             temp[root.child1.lhs] = l_child[0]
-            temp[root.child2.lhs] = r_child[0]
         except:
             temp[root.child1.lhs] = l_child
+        try:
+            
+            temp[root.child2.lhs] = r_child[0]
+        except:
             temp[root.child2.lhs] = r_child
 
         return temp
@@ -39,7 +42,6 @@ def visit(node, graph, parent=None):
             visit(v, graph, k)
         else:
             draw(parent, k, graph)
-            # drawing the label using a distinct name
             draw(k, k + '_' + v, graph)
 
 
