@@ -1,3 +1,6 @@
+import sys
+
+
 class Rule(object):
 
     def __init__(self, lhs=None, rhs=None):
@@ -5,6 +8,8 @@ class Rule(object):
         self.lhs = lhs
         self.rhs = rhs
         self.set_flags()
+        self.child1 = None
+        self.child2 = None
 
     def set_flags(self):
         '''
@@ -13,6 +18,17 @@ class Rule(object):
 
         if len(self.rhs) == 1:
             self.unit_prod = True
+
+    def set_children(self, child1, child2):
+        try:
+            if child2 is not None and self.unit_prod:
+                raise Exception
+        except:
+            print("Trying to open unit productions")
+            sys.exit(0)
+
+        self.child1 = child1
+        self.child2 = child2
 
 
 class Reader(object):
@@ -43,7 +59,7 @@ class Reader(object):
     def return_elements(self):
         return self.rules, self.terminal, self.non_terminal
 
-    
+
 if __name__ == '__main__':
     reader = Reader()
     reader.read()

@@ -1,6 +1,6 @@
 from model import cyk_model
 from rule_reader import Reader
-
+from utils import create_dict_rec
 
 class Parser(object):
 
@@ -70,8 +70,10 @@ class Parser(object):
                                     self.matrix[row_id][i].append(
                                         (diff_rules[0][0],
                                          temp_rule))
+                                    temp_rule.set_children(l_tuples[1],
+                                                           r_tuples[1])
 
-
+        return self.matrix
 if __name__ == '__main__':
     parser = Parser()
     with open('./example.txt') as f:
@@ -79,4 +81,5 @@ if __name__ == '__main__':
         for line in lines:
             parser.reset_values()
             parser.populate(line.split())
-            print(parser.matrix)
+            final_node = parser.matrix[0][-1][0][1]
+            print(create_dict_rec(final_node))
