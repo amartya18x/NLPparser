@@ -1,0 +1,10 @@
+S -> NP VP
+NP -> Det Noun
+VP -> Aux Verb
+NP -> He
+NP -> They
+Det -> The
+Noun ->  boy
+Aux -> does
+Verb -> sing
+VP -> sing
