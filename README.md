@@ -10,5 +10,5 @@ There are somethings you would have to know :
 + __parse_tree.png__ will print a picture of the parse tree.
 + A pretty formatted version of the print will appear on terminal.
     
-    
+> A bigger grammar is added to the big.grammar file    
 Best of luck!
