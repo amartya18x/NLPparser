@@ -1,6 +1,7 @@
 from model import cyk_model
 from rule_reader import Reader
-from utils import create_dict_rec
+from utils import create_dict_rec, draw_graph, print_pretty
+
 
 class Parser(object):
 
@@ -16,8 +17,7 @@ class Parser(object):
         self.terminal_ind, self.non_term_ind, self.rules = \
             model.get_dicts()
         self.rules_list = rules_list
-        print(self.terminal_ind)
-
+        
     def reset_values(self):
         self.matrix = []
 
@@ -29,8 +29,6 @@ class Parser(object):
                 self.matrix[idx].append([])
 
     def populate(self, sentence):
-        non_term_ind = self.non_term_ind
-        term_ind = self.terminal_ind
         rule_ind = self.rules
         sent_len = len(sentence)
         self.initialize_matrix(sent_len)
@@ -82,4 +80,7 @@ if __name__ == '__main__':
             parser.reset_values()
             parser.populate(line.split())
             final_node = parser.matrix[0][-1][0][1]
-            print(create_dict_rec(final_node))
+            src_graph = {'S': create_dict_rec(final_node)}
+            draw_graph(src_graph)
+            print_pretty(src_graph)
+            
