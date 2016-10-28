@@ -10,7 +10,7 @@ class Rule(object):
         self.set_flags()
         self.child1 = None
         self.child2 = None
-        self.parent = None
+        self.child_nodes = []
         self.start = 0
         self.end = 0
 

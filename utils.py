@@ -1,7 +1,7 @@
 import collections
 import pydot
 import json
-
+import types
 
 class ruleSet():
 
@@ -31,6 +31,16 @@ class ruleSet():
         if not flag:
             self.rule_arr.append(new_rule)
             self.end += 1
+
+
+def earley_rec(rule):
+    if isinstance(rule.child_nodes,
+                      types.StringTypes):
+        print rule.child_nodes
+        return
+    print rule
+    for elem in rule.child_nodes:
+        earley_rec(elem)
 
 
 def print_pretty(parseTree):

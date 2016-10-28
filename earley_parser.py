@@ -1,6 +1,6 @@
 from rule_reader import Reader
 from earley_model import earley_model
-from utils import ruleSet
+from utils import ruleSet, earley_rec
 import copy
 from rule_reader import Rule
 
@@ -38,13 +38,14 @@ class Parser(object):
         else:
             rules_list_temp = self.predict_dict[next_char]
 
-        def pred_modify(rule_id):
+        def pred_modify(rule_id, state):
             new_rule = copy.deepcopy(self.rules_list[rule_id])
             new_rule.start = idx
             new_rule.end = 0
             return new_rule
 
-        modified_rules_list = [pred_modify(x[1]) for x in rules_list_temp]
+        modified_rules_list = [pred_modify(x[1],
+                                           start_ind) for x in rules_list_temp]
         return modified_rules_list
 
     def isPOS(self, state):
@@ -65,6 +66,8 @@ class Parser(object):
             prod_rule = copy.deepcopy(self.rules_list[prod_rule_id])
             prod_rule.start = state.start
             prod_rule.end = 1
+            prod_rule.child_nodes = str(prod_rule)
+            prod_rule.string = word
             return prod_rule
         else:
             return None
@@ -98,10 +101,11 @@ class Parser(object):
                 temp_rule = copy.deepcopy(states)
                 temp_rule.end = states.end + 1
                 advanced_rules.append(temp_rule)
+                temp_rule.child_nodes.append(state)
         return advanced_rules
 
     def parse(self, sent):
-        for word in xrange(len(sent)+1):
+        for word in xrange(len(sent) + 1):
             self.table.append(ruleSet())
         self.add_state_list(self.beg_state, 0)
         for idx, column in enumerate(self.table):
@@ -120,7 +124,7 @@ class Parser(object):
                 else:
                     advanced_rules = self.completed(rules)
                     for rules in advanced_rules:
-                        self.add_state_list(rules, idx, False, "Completer")
+                        self.add_state_list(rules, idx, True, "Completer")
         return self.table
 
 
@@ -129,7 +133,15 @@ if __name__ == '__main__':
     with open('./example.txt') as f:
         lines = f.readlines()
         for line in lines:
-            for idx, x in enumerate(parser.parse(line.split())):
+            matrix = parser.parse(line.split())
+            for idx, x in enumerate(matrix):
                 print
                 print("State " + str(idx))
                 print(x)
+            print("Print the tree")
+            for rules in matrix[-1].rule_arr:
+                if rules.lhs == 'GAMMA':
+                    print(" ==================== ")
+                    earley_rec(rules)
+                    print("======================")
+                    print
