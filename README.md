@@ -1,14 +1,12 @@
 ## Hello whoever is here 
 
-To run the code , run the simple command
-`python parser.py`
+To run the code , run the simple command  
+`python cyk_parser.py` for running the cyk parser  
+`python earley_parser.py` for running the earley parser  
 
-There are somethings you would have to know :
+The grammars can be found in `./big.grammar.cnf` and `./big.grammar.early`  
 
-+ __small.grammar__ contains the grammar. It has to be in CNF for now.
-+ __example.text__ contains the line to be parsed
-+ __parse_tree.png__ will print a picture of the parse tree.
-+ A pretty formatted version of the print will appear on terminal.
-    
-> A bigger grammar is added to the big.grammar file    
+Example sentences are there in `./example.txt`
+
+
 Best of luck!
