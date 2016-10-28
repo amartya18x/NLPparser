@@ -4,11 +4,17 @@ from rule_reader import Reader
 class earley_model(object):
 
     def __init__(self, rules=None):
-        self.predict_dict = {}
+        self.predict_dict = {}  # Used in predict function
         self.POS = []
-        self.unit_rhs = {}
+        self.unit_rhs = {}  # Mapping the unit productions with rhs has key
         self.populate_tables(rules)
-        self.POS = ['Verb', 'Noun', 'Det', 'Preposition', 'Aux', 'Proper-Noun', 'Pronoun']
+        self.POS = ['Verb',
+                    'Noun',
+                    'Det',
+                    'Preposition',
+                    'Aux',
+                    'Proper-Noun',
+                    'Pronoun']
 
     def populate_tables(self, rules):
 
