@@ -1,0 +1,11 @@
+S
+NP
+VP
+PP
+Nominal
+Noun
+Proper-Noun
+Verb
+Aux
+Preposition
+Det

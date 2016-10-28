@@ -10,11 +10,17 @@ class Rule(object):
         self.set_flags()
         self.child1 = None
         self.child2 = None
+        self.parent = None
         self.start = 0
         self.end = 0
 
+    def __str__(self):
+        rhs = " ".join(self.rhs)
+        return self.lhs + " -> " + rhs + \
+            "  " + str(self.start) + "," + str(self.end)
+
     def get_next_char(self):
-        return self.rhs[self.end + 1]
+        return self.rhs[self.end]
 
     def set_flags(self):
         '''
@@ -34,6 +40,21 @@ class Rule(object):
 
         self.child1 = child1
         self.child2 = child2
+
+    def isFinished(self):
+        '''
+        Checks whether the rule is finished
+        '''
+        if self.end == len(self.rhs):
+            return True
+        else:
+            return False
+
+    def __eq__(self, other):
+        '''
+        For comparing objects
+        '''
+        return self.__dict__ == other.__dict__
 
 
 class Reader(object):

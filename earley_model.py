@@ -5,9 +5,19 @@ class earley_model(object):
 
     def __init__(self, rules=None):
         self.predict_dict = {}
+        self.POS = []
+        self.unit_rhs = {}
         self.populate_tables(rules)
+        self.POS = ['Verb', 'Noun', 'Det', 'Preposition', 'Aux', 'Proper-Noun']
 
     def populate_tables(self, rules):
+
+        for i in xrange(len(rules)):
+            if rules[i].unit_prod:
+                if rules[i].rhs[0] not in self.unit_rhs.keys():
+                    self.unit_rhs[rules[i].rhs[0]] = [i]
+                else:
+                    self.unit_rhs[rules[i].rhs[0]].append(i)
         for idx, rule in enumerate(rules):
             if rule.lhs not in self.predict_dict.keys():
                 self.predict_dict[rule.lhs] = [(rule.rhs, idx)]
@@ -15,7 +25,7 @@ class earley_model(object):
                 self.predict_dict[rule.lhs].append((rule.rhs, idx))
 
     def get_dicts(self):
-        return (self.predict_dict)
+        return (self.predict_dict, self.POS, self.unit_rhs)
 
 if __name__ == '__main__':
     reader = Reader()

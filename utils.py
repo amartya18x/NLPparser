@@ -3,6 +3,36 @@ import pydot
 import json
 
 
+class ruleSet():
+
+    def __init__(self, rules=[]):
+        self.rule_arr = []
+        self.current = -1
+        self.end = len(rules) - 1
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        if self.current >= self.end:
+            raise StopIteration
+        else:
+            self.current += 1
+            return self.rule_arr[self.current]
+
+    def __str__(self):
+        return '\n'.join([str(x) for x in self.rule_arr])
+
+    def add(self, new_rule):
+        flag = False
+        for rule in self.rule_arr:
+            if rule == new_rule:
+                flag = True
+        if not flag:
+            self.rule_arr.append(new_rule)
+            self.end += 1
+
+
 def print_pretty(parseTree):
     print(json.dumps(parseTree, indent=4))
 
@@ -19,7 +49,7 @@ def create_dict_rec(root):
         except:
             temp[root.child1.lhs] = l_child
         try:
-            
+
             temp[root.child2.lhs] = r_child[0]
         except:
             temp[root.child2.lhs] = r_child
