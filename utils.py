@@ -3,6 +3,7 @@ import pydot
 import json
 import types
 
+
 class ruleSet():
 
     def __init__(self, rules=[]):
@@ -35,12 +36,14 @@ class ruleSet():
 
 def earley_rec(rule):
     if isinstance(rule.child_nodes,
-                      types.StringTypes):
-        print rule.child_nodes
-        return
-    print rule
+                  types.StringTypes):
+        return rule.child_nodes
+    temp_dict = {}
+    # print rule
+
     for elem in rule.child_nodes:
-        earley_rec(elem)
+        temp_dict[elem.lhs] = earley_rec(elem)
+    return temp_dict
 
 
 def print_pretty(parseTree):

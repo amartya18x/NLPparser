@@ -1,6 +1,6 @@
 from rule_reader import Reader
 from earley_model import earley_model
-from utils import ruleSet, earley_rec
+from utils import ruleSet, earley_rec, print_pretty, draw_graph
 import copy
 from rule_reader import Rule
 
@@ -31,7 +31,6 @@ class Parser(object):
             return []
 
         start_ind = state.start
-        end_ind = state.end
         next_char = state.get_next_char()
         if next_char not in self.non_terminal:
             return []
@@ -66,7 +65,7 @@ class Parser(object):
             prod_rule = copy.deepcopy(self.rules_list[prod_rule_id])
             prod_rule.start = state.start
             prod_rule.end = 1
-            prod_rule.child_nodes = str(prod_rule)
+            prod_rule.child_nodes = str(prod_rule.rhs[0])
             prod_rule.string = word
             return prod_rule
         else:
@@ -124,7 +123,7 @@ class Parser(object):
                 else:
                     advanced_rules = self.completed(rules)
                     for rules in advanced_rules:
-                        self.add_state_list(rules, idx, True, "Completer")
+                        self.add_state_list(rules, idx, False, "Completer")
         return self.table
 
 
@@ -133,15 +132,21 @@ if __name__ == '__main__':
     with open('./example.txt') as f:
         lines = f.readlines()
         for line in lines:
+            print "Parsing " + line
+            count = 0
             matrix = parser.parse(line.split())
             for idx, x in enumerate(matrix):
                 print
                 print("State " + str(idx))
                 print(x)
-            print("Print the tree")
+
             for rules in matrix[-1].rule_arr:
                 if rules.lhs == 'GAMMA':
+                    count = count + 1
                     print(" ==================== ")
-                    earley_rec(rules)
+                    tree = earley_rec(rules)
+                    print_pretty(tree)
                     print("======================")
                     print
+            if count == 0:
+                print "It cannot be parsed!"
