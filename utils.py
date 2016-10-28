@@ -7,6 +7,14 @@ import types
 class ruleSet():
 
     def __init__(self, rules=[]):
+        '''
+        Create a container to handle rules
+        in the Earleys algorithm
+
+        rule_arr : List of rules
+        current : Current index while iterating
+        end : keeps track total number of rules
+        '''
         self.rule_arr = []
         self.current = -1
         self.end = len(rules) - 1
@@ -25,6 +33,9 @@ class ruleSet():
         return '\n'.join([str(x) for x in self.rule_arr])
 
     def add(self, new_rule):
+        '''
+        Adds rules uniquesly
+        '''
         flag = False
         for rule in self.rule_arr:
             if rule == new_rule:
@@ -35,6 +46,10 @@ class ruleSet():
 
 
 def earley_rec(rule):
+    '''
+    Convert the pointer tree to a dictionary
+    for easy printing
+    '''
     if isinstance(rule.child_nodes,
                   types.StringTypes):
         return rule.child_nodes

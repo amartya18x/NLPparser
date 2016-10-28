@@ -28,13 +28,20 @@ class cyk_model(object):
 
         # Stored as a dictionary where the key is a tuple
         for idx, rule in enumerate(rules):
+            # Find the non-terminal RHS of a rule
+            # given the non-terminals in the RHS
+            # As there are always only two elements in the RHS
+            # we store a tuple of two elements as key
+
             if tuple(rule.rhs) not in self.find_lhs.keys():
                 self.find_lhs[tuple(rule.rhs)] = [([rule.lhs], idx)]
             else:
                 self.find_lhs[tuple(rule.rhs)].append(([rule.lhs], idx))
 
     def get_dicts(self):
-
+        '''
+        Return the generated stuff
+        '''
         return (self.terminal_ind, self.non_term_ind, self.find_lhs)
 
 if __name__ == '__main__':

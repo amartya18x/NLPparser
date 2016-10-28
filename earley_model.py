@@ -19,11 +19,14 @@ class earley_model(object):
     def populate_tables(self, rules):
 
         for i in xrange(len(rules)):
+            # Create a dictionary of all unit productions
             if rules[i].unit_prod:
                 if rules[i].rhs[0] not in self.unit_rhs.keys():
                     self.unit_rhs[rules[i].rhs[0]] = [i]
                 else:
                     self.unit_rhs[rules[i].rhs[0]].append(i)
+        # Create a dictionary of rules with the LHS
+        # as the key, to access the rhs on O(1) time
         for idx, rule in enumerate(rules):
             if rule.lhs not in self.predict_dict.keys():
                 self.predict_dict[rule.lhs] = [(rule.rhs, idx)]

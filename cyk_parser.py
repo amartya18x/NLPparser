@@ -41,7 +41,7 @@ class Parser(object):
             try:
                 non_terms_tup = rule_ind[tuple([word])]
             except:
-                print "Sorry '"+word+"' is not present in the lexicon."
+                print "Sorry '" + word + "' is not present in the lexicon."
             # Iterate over all the rules than can cause this
             for diff_rules in non_terms_tup:
                 temp_rule = self.rules_list[diff_rules[1]]
@@ -55,23 +55,35 @@ class Parser(object):
             for row_id in xrange(i - 2, -1, -1):
                 # Looking at all possible conditions
                 for inter_id in xrange(i - 1, row_id, -1):
+                    # Get the (lhs, rule objects) tuple
+                    # for the two children
                     left_tuple = self.matrix[row_id][inter_id]
                     right_tuple = self.matrix[inter_id][i]
+
+                    # Go through all combination of the non-terminals
+                    # And check for matches
                     for l_tuples in left_tuple:
                         for r_tuples in right_tuple:
                             left_elem = l_tuples[0]
                             right_elem = r_tuples[0]
                             poss_tuple = (left_elem, right_elem)
+
+                            # Check if they form the RHS
+                            # of a rule
                             if poss_tuple in rule_ind.keys():
                                 search_res = rule_ind[(left_elem, right_elem)]
                                 # Iterate over all the rules than can cause
                                 # this
                                 for diff_rules in search_res:
+                                    # Create a deep copy
                                     temp_rule = copy.deepcopy(
                                         self.rules_list[diff_rules[1]])
+                                    # Add the non-terminal, rule tuple
                                     self.matrix[row_id][i].append(
                                         (diff_rules[0][0],
                                          temp_rule))
+
+                                    # Set pointers to the two children
                                     temp_rule.set_children(l_tuples[1],
                                                            r_tuples[1])
         return self.matrix

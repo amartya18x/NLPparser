@@ -4,6 +4,21 @@ import sys
 class Rule(object):
 
     def __init__(self, lhs=None, rhs=None):
+        '''
+
+        lhs : Left Hand Side of the Rule
+        rhs : Right Hand Side of the Rule
+
+        CYK Algorithm:
+        unit_prod : takes care if it is a unit production
+        child1 : Left Hand child node to be used in backtracking
+        child2 : Right Hand child node to be used in backtracking
+
+        Earley's Algorithm:
+        child_nodes : The nodes that form this
+        start : index in the sentence where the rule started
+        end : Position of the dot w.r.t to start
+        '''
         self.unit_prod = False
         self.lhs = lhs
         self.rhs = rhs
@@ -15,11 +30,17 @@ class Rule(object):
         self.end = 0
 
     def __str__(self):
+        '''
+        Prints the rule prettily
+        '''
         rhs = " ".join(self.rhs)
         return self.lhs + " -> " + rhs + \
             "  " + str(self.start) + "," + str(self.end)
 
     def get_next_char(self):
+        '''
+        Get the character after the dot
+        '''
         return self.rhs[self.end]
 
     def set_flags(self):
@@ -31,6 +52,9 @@ class Rule(object):
             self.unit_prod = True
 
     def set_children(self, child1, child2):
+        '''
+        Set pointers for children
+        '''
         try:
             if child2 is not None and self.unit_prod:
                 raise Exception
