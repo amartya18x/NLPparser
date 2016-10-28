@@ -1,6 +1,6 @@
 from rule_reader import Reader
 from earley_model import earley_model
-from utils import ruleSet, earley_rec, print_pretty, draw_graph
+from utils import ruleSet, earley_rec, print_pretty
 import copy
 from rule_reader import Rule
 
@@ -13,7 +13,7 @@ class Parser(object):
         '''
         self.table = []
         reader = Reader()
-        reader.read()
+        reader.read('./big.grammar.early')
         rules_list, terminal, non_terminal = reader.return_elements()
         model = earley_model(rules_list)
         self.predict_dict, self.POS, self.unit_rhs = model.get_dicts()
@@ -60,7 +60,11 @@ class Parser(object):
         Add in the same list of the table
         '''
         next_char = state.get_next_char()
-        prod_rule_id = self.unit_rhs[word][0]
+        try:
+            prod_rule_id = self.unit_rhs[word][0]
+        except:
+            print "Sorry '"+word+"' is not present in the grammar"
+            exit(0)
         if next_char == self.rules_list[prod_rule_id].lhs:
             prod_rule = copy.deepcopy(self.rules_list[prod_rule_id])
             prod_rule.start = state.start
@@ -104,9 +108,15 @@ class Parser(object):
         return advanced_rules
 
     def parse(self, sent):
+        '''
+        Parse the text
+        '''
+
+        # Add the ruleSet object for each state column
         for word in xrange(len(sent) + 1):
             self.table.append(ruleSet())
         self.add_state_list(self.beg_state, 0)
+
         for idx, column in enumerate(self.table):
             for rules in column:
                 if not rules.isFinished():
@@ -126,27 +136,36 @@ class Parser(object):
                         self.add_state_list(rules, idx, False, "Completer")
         return self.table
 
+    def get_trees(self, sentence):
+        matrix = parser.parse(line.split())
+        States = {}
+        allTrees = []
+        for idx, x in enumerate(matrix):
+            States[idx] = x
+
+        for rules in matrix[-1].rule_arr:
+            if rules.lhs == 'GAMMA':
+                tree = earley_rec(rules)
+                allTrees.append(tree)
+        return allTrees, States
+
 
 if __name__ == '__main__':
     parser = Parser()
     with open('./example.txt') as f:
         lines = f.readlines()
         for line in lines:
-            print "Parsing " + line
-            count = 0
-            matrix = parser.parse(line.split())
-            for idx, x in enumerate(matrix):
+            print "Parsing " +line
+            all_trees, States = parser.get_trees(line)
+            for k in States.keys():
+                print "States "+str(k)
+                print States[k]
                 print
-                print("State " + str(idx))
-                print(x)
-
-            for rules in matrix[-1].rule_arr:
-                if rules.lhs == 'GAMMA':
-                    count = count + 1
-                    print(" ==================== ")
-                    tree = earley_rec(rules)
-                    print_pretty(tree)
-                    print("======================")
-                    print
-            if count == 0:
+                print
+            print "Parse Trees coming"
+            print 
+            if len(all_trees) == 0:
                 print "It cannot be parsed!"
+            else:
+                for trees in all_trees:
+                    print_pretty(trees)

@@ -12,7 +12,7 @@ class Parser(object):
         '''
         self.matrix = []
         reader = Reader()
-        reader.read()
+        reader.read('./big.grammar.cnf')
         rules_list, terminal, non_term = reader.return_elements()
         model = cyk_model(rules_list, non_term, terminal)
         self.terminal_ind, self.non_term_ind, self.rules = \
@@ -38,8 +38,10 @@ class Parser(object):
         for i in xrange(1, sent_len + 1):
             # For each word
             word = sentence[i - 1]
-            non_terms_tup = rule_ind[tuple([word])]
-
+            try:
+                non_terms_tup = rule_ind[tuple([word])]
+            except:
+                print "Sorry '"+word+"' is not present in the lexicon."
             # Iterate over all the rules than can cause this
             for diff_rules in non_terms_tup:
                 temp_rule = self.rules_list[diff_rules[1]]
@@ -73,18 +75,28 @@ class Parser(object):
                                     temp_rule.set_children(l_tuples[1],
                                                            r_tuples[1])
         return self.matrix
+
+    def get_trees(self, sentence):
+        parser.reset_values()
+        parser.parse(line.split())
+        treeList = []
+        for trees in parser.matrix[0][-1]:
+            if trees[0] == 'S':
+                final_node = trees[1]
+                src_graph = {'S': create_dict_rec(final_node)}
+                treeList.append(src_graph)
+
+        return treeList
+
+
 if __name__ == '__main__':
     parser = Parser()
     with open('./example.txt') as f:
         lines = f.readlines()
         for line in lines:
-            parser.reset_values()
-            parser.parse(line.split())
-            for trees in parser.matrix[0][-1]:
-                if trees[0] == 'S':
-                    print(" =========================== ")
-                    final_node = trees[1]
-                    src_graph = {'S': create_dict_rec(final_node)}
-                    print_pretty(src_graph)
-
-            draw_graph(src_graph)
+            all_trees = parser.get_trees(line)
+            if len(all_trees) == 0:
+                print("sorry! It is not parsable")
+            else:
+                for graphs in all_trees:
+                    print_pretty(graphs)

@@ -8,7 +8,7 @@ class earley_model(object):
         self.POS = []
         self.unit_rhs = {}
         self.populate_tables(rules)
-        self.POS = ['Verb', 'Noun', 'Det', 'Preposition', 'Aux', 'Proper-Noun']
+        self.POS = ['Verb', 'Noun', 'Det', 'Preposition', 'Aux', 'Proper-Noun', 'Pronoun']
 
     def populate_tables(self, rules):
 

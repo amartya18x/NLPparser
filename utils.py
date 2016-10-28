@@ -38,7 +38,7 @@ def earley_rec(rule):
     if isinstance(rule.child_nodes,
                   types.StringTypes):
         return rule.child_nodes
-    temp_dict = {}
+    temp_dict = collections.OrderedDict()
     # print rule
 
     for elem in rule.child_nodes:

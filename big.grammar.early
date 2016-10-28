@@ -14,8 +14,9 @@ VP → Verb PP
 VP → VP PP
 PP → Preposition NP
 Verb -> book
-Det -> that
+Det -> the
 Noun -> flight
 Noun -> book
 Preposition -> through
 Proper-Noun -> Houston
+Pronoun -> him
