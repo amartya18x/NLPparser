@@ -10,6 +10,11 @@ class Rule(object):
         self.set_flags()
         self.child1 = None
         self.child2 = None
+        self.start = 0
+        self.end = 0
+
+    def get_next_char(self):
+        return self.rhs[self.end + 1]
 
     def set_flags(self):
         '''

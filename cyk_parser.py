@@ -1,4 +1,4 @@
-from model import cyk_model
+from cyk_model import cyk_model
 from rule_reader import Reader
 import copy
 from utils import create_dict_rec, draw_graph, print_pretty
@@ -29,7 +29,7 @@ class Parser(object):
             for idy in xrange(sent_len + 1):
                 self.matrix[idx].append([])
 
-    def populate(self, sentence):
+    def parse(self, sentence):
         rule_ind = self.rules
         sent_len = len(sentence)
         self.initialize_matrix(sent_len)
@@ -79,7 +79,7 @@ if __name__ == '__main__':
         lines = f.readlines()
         for line in lines:
             parser.reset_values()
-            parser.populate(line.split())
+            parser.parse(line.split())
             for trees in parser.matrix[0][-1]:
                 if trees[0] == 'S':
                     print(" =========================== ")
